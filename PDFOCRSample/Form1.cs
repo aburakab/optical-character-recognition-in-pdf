@@ -11,14 +11,7 @@
 
 using System;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
-using System.Data;
-using Syncfusion.Pdf;
-
-using Syncfusion.Pdf.Graphics;
 using Syncfusion.OCRProcessor;
 using Syncfusion.Pdf.Parsing;
 using System.Collections.Generic;
@@ -30,7 +23,9 @@ namespace EssentialPDFSamples
     /// </summary>
     public class Form1 : Form
     {
-        # region Private Members
+        private const string _syncfusionVersion = "18.4.0.30";
+
+        #region Private Members
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private Panel panelRegion;
@@ -373,15 +368,15 @@ namespace EssentialPDFSamples
         static void Main()
         {
             Application.Run(new Form1());
-
         }
+        
         #endregion
 
         # region Events
-        private void button1_Click(object sender, System.EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             //Initialize the OCR processor
-            using (OCRProcessor processor = new OCRProcessor(@"../../packages/Syncfusion.Pdf.OCR.WinForms.17.1.0.47/lib/TesseractBinaries/3.02"))
+            using (OCRProcessor processor = new OCRProcessor($@"../../packages/Syncfusion.Pdf.OCR.WinForms.{_syncfusionVersion}/lib/TesseractBinaries/3.02"))
             {
                 //Load the PDF document 
                 PdfLoadedDocument lDoc = new PdfLoadedDocument(textBox1.Tag.ToString());
@@ -406,8 +401,10 @@ namespace EssentialPDFSamples
                     pageRegions.Add(region);
                     processor.Settings.Regions = pageRegions;
                 }
+                
                 //Process OCR by providing loaded PDF document, Data dictionary and language
-                processor.PerformOCR(lDoc, @"../../packages/Syncfusion.Pdf.OCR.WinForms.17.1.0.47/lib/LanguagePack/");
+                processor.PerformOCR(lDoc, $@"../../packages/Syncfusion.Pdf.OCR.WinForms.{_syncfusionVersion}/lib/LanguagePack/");
+                
                 //Save the OCR processed PDF document in the disk
                 lDoc.Save("OCRedPDF.pdf");
                 lDoc.Close(true);
@@ -471,6 +468,7 @@ namespace EssentialPDFSamples
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("YOUR LICENSE KEY");
             //this.Height = 218;
         }
 

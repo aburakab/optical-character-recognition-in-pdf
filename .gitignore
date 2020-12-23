@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/PDFOCRSample/packages/Syncfusion.Pdf.OCR.WinForms.18.4.0.30
+*.cache
+/PDFOCRSample/obj
