@@ -378,6 +378,8 @@ namespace EssentialPDFSamples
             //Initialize the OCR processor
             using (OCRProcessor processor = new OCRProcessor($@"../../packages/Syncfusion.Pdf.OCR.WinForms.{_syncfusionVersion}/lib/TesseractBinaries/3.02"))
             {
+                processor.Settings.TesseractVersion = TesseractVersion.Version4_0;
+                
                 //Load the PDF document 
                 PdfLoadedDocument lDoc = new PdfLoadedDocument(textBox1.Tag.ToString());
                 //Language to process the OCR

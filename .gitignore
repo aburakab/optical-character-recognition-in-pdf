@@ -5,3 +5,5 @@
 /PDFOCRSample/packages/Syncfusion.Pdf.OCR.WinForms.18.4.0.30
 *.cache
 /PDFOCRSample/obj
+/PDFOCRSample/.vs
+/PDFOCRSample/bin
