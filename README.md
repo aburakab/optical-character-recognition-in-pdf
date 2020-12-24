@@ -1,5 +1,5 @@
 # Introduction
-This repo forked for research purposes and check if Arabic Language can OCRed with high quality results.
+This repo forked for research purposes and check if **Arabic Docs** can be OCRed with high quality results.
 
 I tried to use the built-in implementation for Tesseract 3.05 and 4.0
 3.05 => Works well
