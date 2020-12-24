@@ -1,8 +1,10 @@
 # Introduction
 This repo forked for research purposes and check if **Arabic Docs** can be OCRed with high quality results.
 
-I tried to use the built-in implementation for Tesseract 3.05 and 4.0
+I tried to use the built-in implementation for Tesseract 3.05 and 4.0.
+
 3.05 => Works well
+
 4.0 => Not working!
 
 > Note: Sample PDF Arabic Document added.
