@@ -5,7 +5,7 @@ I tried to use the built-in implementation for Tesseract 3.05 and 4.0
 3.05 => Works well
 4.0 => Not working!
 
-PDF Arabic Document downloaded from the internet and the 
+> Note: Sample PDF Arabic Document added.
 
 ## How did I make it work with Tesseract Version 3.05
 I downloaded the **tessdata** from this URL.
