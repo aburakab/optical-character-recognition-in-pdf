@@ -398,7 +398,7 @@ namespace EssentialPDFSamples
             if (result == DialogResult.Yes)
             {
                 tesseractVersion = TesseractVersion.Version4_0;
-                _version = "4.0/x64";
+                _version = "4.0/x86";
                 _tesseractBinaries =
                     $@"../../packages/Syncfusion.Pdf.OCR.WinForms.{_syncfusionVersion}/lib/TesseractBinaries/{_version}";
             }
@@ -409,8 +409,10 @@ namespace EssentialPDFSamples
                 //Load the PDF document 
                 var lDoc = new PdfLoadedDocument(textBox1.Tag.ToString());
 
+                result = MessageBox.Show("Arabic OCR?", "Yes: Arabic | No: English", MessageBoxButtons.YesNo);
+                
                 //Language to process the OCR
-                processor.Settings.Language = (result == DialogResult.Yes ? "ara" : Languages.English);
+                processor.Settings.Language = result == DialogResult.Yes ? "ara" : Languages.English;
                 processor.Settings.Performance = Performance.Slow;
                 processor.Settings.TesseractVersion = tesseractVersion;
 
