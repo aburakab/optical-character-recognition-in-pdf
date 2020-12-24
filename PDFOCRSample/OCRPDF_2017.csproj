@@ -130,7 +130,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\ScannedDocument.pdf" />
+    <None Include="Data\arabic-sample.pdf" />
+    <None Include="Data\english-sample.pdf" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

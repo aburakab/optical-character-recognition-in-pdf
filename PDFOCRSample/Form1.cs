@@ -1,4 +1,4 @@
-#region Copyright Syncfusion Inc. 2001 - 2007
+﻿#region Copyright Syncfusion Inc. 2001 - 2007
 //
 //  Copyright Syncfusion Inc. 2001 - 2007. All rights reserved.
 //
@@ -26,6 +26,7 @@ namespace EssentialPDFSamples
         private const string _syncfusionVersion = "18.4.0.30";
 
         #region Private Members
+
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private Panel panelRegion;
@@ -50,6 +51,10 @@ namespace EssentialPDFSamples
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
+
+        private string _tesseractBinaries;
+        private string _version;
+
         # endregion
 
         # region Constructor
@@ -63,13 +68,20 @@ namespace EssentialPDFSamples
             Application.EnableVisualStyles();
             this.openFileDialog1.Filter = "PDF files (*.pdf)|*.pdf";
             this.pictureBox1.Image = new Bitmap("../../Data/pdf_header.png");
-            textBox1.Tag = @"..\..\Data\ScannedDocument.pdf";
-            textBox1.Text = "ScannedDocument.Pdf";
+            
+            //textBox1.Tag = @"..\..\Data\english-sample.pdf";
+            //textBox1.Text = "english-sample.pdf";
+            textBox1.Tag = @"..\..\Data\arabic-sample.pdf";
+            textBox1.Text = "arabic-sample.pdf";
+            
             this.Height = 310;
             panelRegion.Visible = false;
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
+
+            _version = "3.05/x86";
+            _tesseractBinaries = $@"../../packages/Syncfusion.Pdf.OCR.WinForms.{_syncfusionVersion}/lib/TesseractBinaries/{_version}";
         }
 
         /// <summary>
@@ -369,47 +381,66 @@ namespace EssentialPDFSamples
         {
             Application.Run(new Form1());
         }
-        
+
         #endregion
 
-        # region Events
+        #region Events
         private void button1_Click(object sender, EventArgs e)
         {
-            //Initialize the OCR processor
-            using (OCRProcessor processor = new OCRProcessor($@"../../packages/Syncfusion.Pdf.OCR.WinForms.{_syncfusionVersion}/lib/TesseractBinaries/3.02"))
+            var tesseractVersion = TesseractVersion.Version3_05;
+
+            var result = MessageBox.Show(
+                "Would you like to use 4.0 instead of 3.05?", "Tesseract Version",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Information,
+                MessageBoxDefaultButton.Button1);
+
+            if (result == DialogResult.Yes)
             {
-                processor.Settings.TesseractVersion = TesseractVersion.Version4_0;
-                
+                tesseractVersion = TesseractVersion.Version4_0;
+                _version = "4.0/x64";
+                _tesseractBinaries =
+                    $@"../../packages/Syncfusion.Pdf.OCR.WinForms.{_syncfusionVersion}/lib/TesseractBinaries/{_version}";
+            }
+
+            //Initialize the OCR processor
+            using (var processor = new OCRProcessor(_tesseractBinaries))
+            {
                 //Load the PDF document 
-                PdfLoadedDocument lDoc = new PdfLoadedDocument(textBox1.Tag.ToString());
+                var lDoc = new PdfLoadedDocument(textBox1.Tag.ToString());
+
                 //Language to process the OCR
-                processor.Settings.Language = Languages.English;
+                processor.Settings.Language = (result == DialogResult.Yes ? "ara" : Languages.English);
+                processor.Settings.Performance = Performance.Slow;
+                processor.Settings.TesseractVersion = tesseractVersion;
+
                 if (rbtnRegion.Checked)
                 {
-                    int x = 0;
-                    int y = 0;
-                    int width = 0;
-                    int height = 0;
-                    int.TryParse(txtXCoordinate.Text, out x);
-                    int.TryParse(txtYCoordinate.Text, out y);
-                    int.TryParse(txtWidth.Text, out width);
-                    int.TryParse(txtHeight.Text, out height);
-                    RectangleF rect = new RectangleF(x, y, width, height);
+                    int.TryParse(txtXCoordinate.Text, out var x);
+                    int.TryParse(txtYCoordinate.Text, out var y);
+                    int.TryParse(txtWidth.Text, out var width);
+                    int.TryParse(txtHeight.Text, out var height);
+                    var rect = new RectangleF(x, y, width, height);
+
                     //Assign the rectangles to the page
-                    PageRegion region = new PageRegion();
-                    List<PageRegion> pageRegions = new List<PageRegion>();
+                    var region = new PageRegion();
+                    var pageRegions = new List<PageRegion>();
                     region.PageIndex = 0;
                     region.PageRegions = new RectangleF[] { rect };
                     pageRegions.Add(region);
                     processor.Settings.Regions = pageRegions;
                 }
-                
+
                 //Process OCR by providing loaded PDF document, Data dictionary and language
-                processor.PerformOCR(lDoc, $@"../../packages/Syncfusion.Pdf.OCR.WinForms.{_syncfusionVersion}/lib/LanguagePack/");
-                
+                var text = processor.PerformOCR(lDoc, tesseractVersion == TesseractVersion.Version4_0 ?
+                    $@"../../packages/Syncfusion.Pdf.OCR.WinForms.{_syncfusionVersion}/lib/LanguagePack-4.0/" :
+                    $@"../../packages/Syncfusion.Pdf.OCR.WinForms.{_syncfusionVersion}/lib/LanguagePack-3.05/");
+
                 //Save the OCR processed PDF document in the disk
                 lDoc.Save("OCRedPDF.pdf");
                 lDoc.Close(true);
+
+                MessageBox.Show(text);
             }
             //Message box confirmation to view the created PDF document.
             if (MessageBox.Show("Do you want to view the PDF file?", "PDF File Created",
@@ -439,7 +470,7 @@ namespace EssentialPDFSamples
 
             return string.Format(@"{0}{1}\{2}", fullPath, folder, fileName);
         }
-		 /// <summary>
+        /// <summary>
         /// Gets the full path of the PDF template or image.
         /// </summary>
         /// <param name="fileName">Name of the file</param>
