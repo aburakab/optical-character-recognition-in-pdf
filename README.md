@@ -8,7 +8,7 @@ I tried to use the built-in implementation for Tesseract 3.05 and 4.0
 > Note: Sample PDF Arabic Document added.
 
 ## How did I make it work with Tesseract Version 3.05
-I downloaded the **tessdata** from this URL.
+I modified the code and I downloaded the **tessdata** from this URL.
 https://github.com/tesseract-ocr/tessdata/tree/3.04.00
 
 ## Why Tesseract Version 4.0 did not work?
